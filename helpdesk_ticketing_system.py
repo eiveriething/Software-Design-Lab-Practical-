@@ -81,7 +81,15 @@ def create_ticket():
 
     print("\n====== Create a New Ticket ======")
 
-    title = input("Enter the title of the ticket: ")
+    title = input("Enter the title of the ticket: ").strip()
+    while not title:
+        print("Title cannot be empty. Please enter a valid title.")
+        title = input("Enter the title of the ticket: ").strip()    
+
+        if title: 
+            break
+        print("Title cannot be empty. Please enter a valid title.")
+
     description = input("Describe the issue: ")
     username = input("Enter your username: ")
 
@@ -655,10 +663,18 @@ def login_gate(system, admin, it_staff):
             username = input("Username: ")
             password = input("Password: ")
 
-            staff = it_staff.get(username)
-            if staff and staff.login(username, password):
-                print(f"\nWelcome, {username}.")
+            staff = None
+
+            for staff_name, staff_account in it_staff.items():
+                if staff_account.username == username and staff_account.password == password:
+                    staff = staff_account
+                    break
+
+            if staff:
+                print(f"\nWelcome, {staff_name}.")
                 return "it", staff
+
+            print("\nInvalid IT staff credentials.")
 
             print("\nInvalid IT staff credentials.")
 
@@ -694,11 +710,14 @@ def main():
 
     admin = Admin("admin", "admin123")
 
+    user = User(1, "user", "user123", "Student User")
+    system.users.append(user)
+
     it_staff = {
-        "IT Staff 01": ITStaff("IT Staff 01", "it01pass"),
-        "IT Staff 02": ITStaff("IT Staff 02", "it02pass"),
-        "Network Support": ITStaff("Network Support", "netpass"),
-        "Hardware Support": ITStaff("Hardware Support", "hwpass"),
+        "IT Staff 01": ITStaff("it1", "it123"),
+        "IT Staff 02": ITStaff("it2", "it456"),
+        "Network Support": ITStaff("netsupport", "net123"),
+        "Hardware Support": ITStaff("hwsupport", "hw123"),
     }
 
     while True:
