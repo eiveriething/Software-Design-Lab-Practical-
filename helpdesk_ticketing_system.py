@@ -355,6 +355,10 @@ class Admin:
 
 class ITStaff(Admin):
 
+    def __init__(self, username, password, name):
+        super().__init__(username, password)
+        self.name = name
+
     def send_resolution(self, ticket, resolution):
 
         ticket.resolution = resolution
@@ -490,11 +494,11 @@ def it_menu(it, system):
     while True:
 
         assigned_tickets = [
-            t for t in system.tickets if t.assigned_to == it.username
+            t for t in system.tickets if t.assigned_to == it.name
         ]
 
         print("\n================================")
-        print(f"     IT DASHBOARD ({it.username})")
+        print(f"     IT DASHBOARD ({it.name})")
         print("================================")
         print("1. View My Assigned Tickets")
         print("2. Search Ticket")
@@ -714,10 +718,10 @@ def main():
     system.users.append(user)
 
     it_staff = {
-        "IT Staff 01": ITStaff("it1", "it123"),
-        "IT Staff 02": ITStaff("it2", "it456"),
-        "Network Support": ITStaff("netsupport", "net123"),
-        "Hardware Support": ITStaff("hwsupport", "hw123"),
+    "IT Staff 01": ITStaff("it1", "it123", "IT Staff 01"),
+    "IT Staff 02": ITStaff("it2", "it456", "IT Staff 02"),
+    "Network Support": ITStaff("netsupport", "net123", "Network Support"),
+    "Hardware Support": ITStaff("hwsupport", "hw123", "Hardware Support"),
     }
 
     while True:
